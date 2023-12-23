@@ -17,13 +17,13 @@ class Taxi {
     this.driver = new Driver();
   }
 
-  update() {
+  update(jutaBorders) {
     this.#handleAcceleration();
     this.#handleRotation();
     this.#capSpeed();
     this.#applyFriction();
     this.#moveTaxi();
-    this.sensor.update();
+    this.sensor.update(jutaBorders);
   }
 
   #handleAcceleration() {

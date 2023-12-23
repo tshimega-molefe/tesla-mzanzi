@@ -10,7 +10,7 @@ const taxi = new Taxi(juta.getLaneCenter(1), 100, 30, 50);
 animate();
 
 function animate() {
-  taxi.update();
+  taxi.update(juta.borders);
   jozi.height = window.innerHeight;
 
   ctx.save();

@@ -2,14 +2,17 @@ class Sensor {
   constructor(taxi) {
     this.taxi = taxi;
     this.rayCount = 5;
-    this.rayLength = 100;
+    this.rayLength = 150;
     this.raySpread = Math.PI / 2;
 
     this.rays = [];
+    this.readings = []; // Readings to detect Juta Street borders
   }
 
-  update() {
+  // Update the sensor readings and rays based on the current state
+  update(jutaBorders) {
     this.rays = [];
+    this.readings = [];
 
     // Iterate through the specified number of rays
     for (let i = 0; i < this.rayCount; i++) {
@@ -22,13 +25,21 @@ class Sensor {
 
       // Add the ray to the array
       this.rays.push([start, end]);
+
+      // Get readings for the current ray and Juta Street borders
+      this.readings.push(this.#getReadings(this.rays[i], jutaBorders));
     }
   }
 
+  // Draw the sensor rays on the canvas
   draw(ctx) {
     // Iterate through each ray and draw it on the canvas
     for (let i = 0; i < this.rayCount; i++) {
-      this.#drawRay(ctx, i);
+      let end = this.rays[i][1];
+      if (this.readings[i]) {
+        end = this.readings[i];
+      }
+      this.#drawRay(ctx, i, end);
     }
   }
 
@@ -51,13 +62,47 @@ class Sensor {
     };
   }
 
+  // Calculate the readings from the sensor
+  #getReadings(ray, jutaBorders) {
+    let touches = [];
+
+    // Iterate through Juta Street borders and find intersections
+    for (let i = 0; i < jutaBorders.length; i++) {
+      const touch = getIntersection(
+        ray[0],
+        ray[1],
+        jutaBorders[i][0],
+        jutaBorders[i][1]
+      );
+      if (touch) {
+        touches.push(touch);
+      }
+    }
+
+    // Determine the minimum offset among touches
+    if (touches.length === 0) {
+      return null;
+    } else {
+      const offsets = touches.map((e) => e.offset);
+      const minOffset = Math.min(...offsets);
+      return touches.find((e) => e.offset === minOffset);
+    }
+  }
+
   // Draw the specified ray on the canvas
-  #drawRay(ctx, rayIndex) {
+  #drawRay(ctx, rayIndex, end) {
     ctx.beginPath();
     ctx.lineWidth = 2;
     ctx.strokeStyle = "yellow";
     ctx.moveTo(this.rays[rayIndex][0].x, this.rays[rayIndex][0].y);
-    ctx.lineTo(this.rays[rayIndex][1].x, this.rays[rayIndex][1].y);
+    ctx.lineTo(end.x, end.y);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "black";
+    ctx.moveTo(this.rays[rayIndex][1].x, this.rays[rayIndex][1].y);
+    ctx.lineTo(end.x, end.y);
     ctx.stroke();
   }
 }
