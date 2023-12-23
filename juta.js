@@ -1,6 +1,6 @@
 // Defining Juta Street in Jozi CBD
 class Juta {
-  constructor(x, width, laneCount = 3) {
+  constructor(x, width, laneCount = 4) {
     this.x = x; // The center of the road
     this.width = width; // The width of Juta Street
     this.laneCount = laneCount; // How many lanes Juta Street has
@@ -11,6 +11,12 @@ class Juta {
     const infinity = 10000000; // Length of Juta Street
     this.top = -infinity;
     this.bottom = infinity;
+  }
+  // Find the center of a lane
+  getLaneCenter(laneIndex) {
+    // left -> right '0 | 1 | 2 | 3'
+    const laneWidth = this.width / this.laneCount;
+    return this.left + laneWidth / 2 + laneIndex * laneWidth;
   }
 
   // Drawing the white boundaries of Juta Street
