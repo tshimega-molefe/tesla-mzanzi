@@ -12,6 +12,7 @@ class Taxi {
 
     this.angle = 0;
 
+    this.sensor = new Sensor(this);
     this.driver = new Driver();
   }
 
@@ -21,6 +22,7 @@ class Taxi {
     this.#capSpeed();
     this.#applyFriction();
     this.#moveTaxi();
+    this.sensor.update();
   }
 
   #handleAcceleration() {
@@ -80,5 +82,7 @@ class Taxi {
     ctx.fill();
 
     ctx.restore();
+
+    this.sensor.draw(ctx);
   }
 }
