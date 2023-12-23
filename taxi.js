@@ -16,14 +16,14 @@ class Taxi {
   }
 
   update() {
-    this.handleAcceleration();
-    this.handleRotation();
-    this.capSpeed();
-    this.applyFriction();
-    this.moveTaxi();
+    this.#handleAcceleration();
+    this.#handleRotation();
+    this.#capSpeed();
+    this.#applyFriction();
+    this.#moveTaxi();
   }
 
-  handleAcceleration() {
+  #handleAcceleration() {
     if (this.driver.forward) {
       this.speed += this.acceleration;
     }
@@ -32,7 +32,7 @@ class Taxi {
     }
   }
 
-  handleRotation() {
+  #handleRotation() {
     if (this.speed !== 0) {
       const flip = this.speed > 0 ? 1 : -1;
       if (this.driver.left) {
@@ -44,7 +44,7 @@ class Taxi {
     }
   }
 
-  capSpeed() {
+  #capSpeed() {
     if (this.speed > this.topSpeed) {
       this.speed = this.topSpeed;
     }
@@ -53,7 +53,7 @@ class Taxi {
     }
   }
 
-  applyFriction() {
+  #applyFriction() {
     if (this.speed > 0) {
       this.speed -= this.friction;
     }
@@ -65,7 +65,7 @@ class Taxi {
     }
   }
 
-  moveTaxi() {
+  #moveTaxi() {
     this.x -= Math.sin(this.angle) * this.speed;
     this.y -= Math.cos(this.angle) * this.speed;
   }
