@@ -26,7 +26,6 @@ class Driver {
           this.right = true;
           break;
       }
-      console.table(this);
     };
 
     document.onkeyup = (event) => {
@@ -44,7 +43,6 @@ class Driver {
           this.right = false;
           break;
       }
-      console.table(this);
     };
   }
 }
