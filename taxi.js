@@ -23,7 +23,32 @@ class Taxi {
     this.#capSpeed();
     this.#applyFriction();
     this.#moveTaxi();
+    this.polygon = this.#createPolygon();
     this.sensor.update(jutaBorders);
+  }
+
+  // TODO: Implement collision detection
+  #createPolygon() {
+    const points = [];
+    const radius = Math.hypot(this.width, this.height) / 2;
+    const alpha = Math.atan2(this.width, this.height);
+
+    points.push({
+      x: this.x - Math.sin(this.angle - alpha) * radius,
+      y: this.y - Math.cos(this.angle - alpha) * radius,
+    });
+    points.push({
+      x: this.x - Math.sin(this.angle + alpha) * radius,
+      y: this.y - Math.cos(this.angle + alpha) * radius,
+    });
+    points.push({
+      x: this.x - Math.sin(Math.PI + this.angle - alpha) * radius,
+      y: this.y - Math.cos(Math.PI + this.angle - alpha) * radius,
+    });
+    points.push({
+      x: this.x - Math.sin(Math.PI + this.angle + alpha) * radius,
+      y: this.y - Math.cos(Math.PI + this.angle + alpha) * radius,
+    });
   }
 
   #handleAcceleration() {
@@ -74,6 +99,8 @@ class Taxi {
   }
 
   draw(ctx) {
+    // TODO: us the #createPolygon method to draw the taxi.
+
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(-this.angle);
