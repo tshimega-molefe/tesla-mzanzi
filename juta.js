@@ -8,37 +8,31 @@ class Juta {
     this.left = x - width / 2;
     this.right = x + width / 2;
 
-    const infinity = 999999999; // Length of Juta Street
+    const infinity = 10000000; // Length of Juta Street
     this.top = -infinity;
     this.bottom = infinity;
   }
 
-  // Drawing the yellow boundaries of Juta Street
+  // Drawing the white boundaries of Juta Street
   draw(ctx) {
     ctx.lineWidth = 5;
-    ctx.strokeStyle = "yellow";
+    ctx.strokeStyle = "white";
 
     // Drawing the white lanes of Juta Street
     for (let i = 0; i <= this.laneCount; i++) {
       //   Linearly interpolate (LERP) to estimate the values that lie between known values. In this case between 'i' and the laneCount
       const x = lerp(this.left, this.right, i / this.laneCount);
+
+      if (i > 0 && i < this.laneCount) {
+        ctx.setLineDash([20, 20]);
+      } else {
+        ctx.setLineDash([]);
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(x, this.top);
+      ctx.lineTo(x, this.bottom);
+      ctx.stroke();
     }
-
-    ctx.beginPath();
-    ctx.moveTo(this.left, this.top);
-    ctx.lineTo(this.left, this.bottom);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(this.right, this.top);
-    ctx.lineTo(this.right, this.bottom);
-    ctx.stroke();
   }
-}
-
-// lerp(a,b,t)=a+t⋅(b−a)
-
-function lerp(A, B, t) {
-  // Linearly interpolates between values A and B at percentage 't' along the range.
-  return A + (B - A) * t;
 }
