@@ -37,19 +37,27 @@ function getIntersection(A, B, C, D) {
   return null;
 }
 
+// Check if two polygons intersect by iterating through their edges
 function polysIntersect(poly1, poly2) {
+  // Iterate through the edges of the first polygon
   for (let i = 0; i < poly1.length; i++) {
+    // Iterate through the edges of the second polygon
     for (let j = 0; j < poly2.length; j++) {
+      // Check for intersection between the current edges
       const touch = getIntersection(
         poly1[i],
         poly1[(i + 1) % poly1.length],
         poly2[j],
         poly2[(j + 1) % poly2.length]
       );
+
+      // If there is an intersection, polygons overlap
       if (touch) {
         return true;
       }
     }
   }
+
+  // If no intersections found, polygons do not overlap
   return false;
 }
