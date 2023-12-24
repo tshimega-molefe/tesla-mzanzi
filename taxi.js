@@ -20,13 +20,17 @@ class Taxi {
   }
 
   update(jutaBorders) {
-    this.#handleAcceleration();
-    this.#handleRotation();
-    this.#capSpeed();
-    this.#applyFriction();
-    this.#moveTaxi();
-    this.polygon = this.#createPolygon();
-    this.damaged = this.#assessDamage(jutaBorders);
+    // Write-off the taxi in the event of a collision.
+    if (!this.damaged) {
+      this.#handleAcceleration();
+      this.#handleRotation();
+      this.#capSpeed();
+      this.#applyFriction();
+      this.#moveTaxi();
+      this.polygon = this.#createPolygon();
+      this.damaged = this.#assessDamage(jutaBorders);
+    }
+
     this.sensor.update(jutaBorders);
   }
 
