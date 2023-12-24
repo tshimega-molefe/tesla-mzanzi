@@ -1,10 +1,10 @@
 body{
     margin: 0;
-    background: darkgray;
+    background: rgb(3, 115, 38);
     overflow: hidden;
     text-align: center;
 }
 
 #joburgCBD{
-    background: lightgray;
+    background: rgb(94, 94, 94);
 }
