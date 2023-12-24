@@ -12,6 +12,8 @@ class Taxi {
 
     this.angle = 0;
 
+    this.damaged = false;
+
     this.sensor = new Sensor(this);
 
     this.driver = new Driver();
@@ -24,31 +26,35 @@ class Taxi {
     this.#applyFriction();
     this.#moveTaxi();
     this.polygon = this.#createPolygon();
+    this.damaged = this.#assessDamage(jutaBorders);
     this.sensor.update(jutaBorders);
   }
 
   // TODO: Implement collision detection
+  #assessDamage(jutaBorders) {
+    for (let i = 0; i < jutaBorders.length; i++) {
+      if (polysIntersect(this.polygon, jutaBorders[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   #createPolygon() {
     const points = [];
     const radius = Math.hypot(this.width, this.height) / 2;
     const alpha = Math.atan2(this.width, this.height);
 
-    points.push({
-      x: this.x - Math.sin(this.angle - alpha) * radius,
-      y: this.y - Math.cos(this.angle - alpha) * radius,
+    const addPoint = (angle) => ({
+      x: this.x - Math.sin(angle) * radius,
+      y: this.y - Math.cos(angle) * radius,
     });
-    points.push({
-      x: this.x - Math.sin(this.angle + alpha) * radius,
-      y: this.y - Math.cos(this.angle + alpha) * radius,
-    });
-    points.push({
-      x: this.x - Math.sin(Math.PI + this.angle - alpha) * radius,
-      y: this.y - Math.cos(Math.PI + this.angle - alpha) * radius,
-    });
-    points.push({
-      x: this.x - Math.sin(Math.PI + this.angle + alpha) * radius,
-      y: this.y - Math.cos(Math.PI + this.angle + alpha) * radius,
-    });
+
+    points.push(addPoint(this.angle - alpha));
+    points.push(addPoint(this.angle + alpha));
+    points.push(addPoint(Math.PI + this.angle - alpha));
+    points.push(addPoint(Math.PI + this.angle + alpha));
+
     return points;
   }
 
@@ -100,6 +106,11 @@ class Taxi {
   }
 
   draw(ctx) {
+    if (this.damaged) {
+      ctx.fillStyle = "red";
+    } else {
+      ctx.fillStyle = "black";
+    }
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
     for (let i = 1; i < this.polygon.length; i++) {
