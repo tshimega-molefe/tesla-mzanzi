@@ -25,9 +25,9 @@ function animate() {
   juta.draw(ctx);
   // Drawing each Taxi in the traffic array
   for (let i = 0; i < traffic.length; i++) {
-    traffic[i].draw(ctx);
+    traffic[i].draw(ctx, "orange");
   }
-  taxi.draw(ctx);
+  taxi.draw(ctx, "black");
 
   ctx.restore();
   requestAnimationFrame(animate);
