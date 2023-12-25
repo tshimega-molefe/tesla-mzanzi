@@ -29,11 +29,15 @@ class Level {
    */
   static #randomize(level) {
     // Loop through inputs and outputs to set random weights
-    for (let i = 0; i < level.length; i++) {
+    for (let i = 0; i < level.inputs.length; i++) {
       for (let j = 0; j < level.outputs.length; j++) {
         // Randomizing weights between -1 and 1
         level.weights[i][j] = Math.random() * 2 - 1;
       }
+    }
+    for (let i = 0; i < level.biases.length; i++) {
+      // Randomizing biases between -1 and 1
+      level.biases[i][j] = Math.random() * 2 - 1;
     }
   }
 }
