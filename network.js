@@ -1,4 +1,42 @@
 /**
+ * Class representing a neural network with multiple levels.
+ */
+class NeuralNetwork {
+  /**
+   * Constructor for the NeuralNetwork class.
+   * @param {number[]} neuronCounts - Array specifying the number of neurons in each level.
+   */
+  constructor(neuronCounts) {
+    // Array to store different levels of the neural network
+    this.levels = [];
+
+    // Creating individual levels with specified neuron counts
+    for (let i = 0; i < neuronCounts.length; i++) {
+      this.levels.push(new Level(neuronCounts[i], neuronCounts[i + 1]));
+    }
+  }
+
+  /**
+   * Static method to perform feedforward operation on the neural network.
+   * @param {number[]} givenInputs - Array of input values.
+   * @param {NeuralNetwork} network - The neural network instance.
+   * @returns {number[]} - Array of output values.
+   */
+  static feedForward(givenInputs, network) {
+    // Initialize outputs with the first level's feedforward result
+    let outputs = Level.feedForward(givenInputs, network.levels[0]);
+
+    // Iterate through the rest of the levels for feedforwarding
+    for (let i = 1; i < network.levels.length; i++) {
+      outputs = Level.feedForward(outputs, network.levels[i]);
+    }
+
+    // Return the final output values
+    return outputs;
+  }
+}
+
+/**
  * Class representing a neural network level with specified input and output counts.
  */
 class Level {
