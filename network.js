@@ -69,3 +69,35 @@ class Level {
     return level.outputs;
   }
 }
+
+/**
+ * Class representing a neural network input neuron.
+ * 
+ * Initialization:
+
+The method receives givenInputs, which represents the input values to the neural network for a particular instance.
+The method takes a level parameter, which represents the current neural network level (layer) for which the feedforward operation is performed.
+Input Neurons:
+
+The method iterates over each input neuron in the level.
+For each input neuron, it calls the feedForward method on the neuron, passing the corresponding input value from givenInputs.
+Weighted Sum Calculation:
+
+After the input neurons have processed the input values, the method proceeds to calculate the weighted sum for each output neuron.
+It iterates over each output neuron and, for each, iterates over the input neurons to calculate the weighted sum.
+The weighted sum (sum) is computed as the sum of the product of each input value and its corresponding weight.
+Activation Function:
+
+The method checks whether the calculated sum is greater than the bias associated with the output neuron.
+If the sum is greater than the bias, the output of the neuron is set to 1.
+If the sum is not greater than the bias, the output is set to 0.
+This step represents a simple threshold activation function.
+Output Update:
+
+The method updates the output values for each output neuron based on the activation function's result.
+Return Output Values:
+
+Finally, the method returns the updated output values of the level, which represent the network's output for the given inputs.
+In summary, the feedforward operation involves propagating input values through the network, calculating weighted sums, applying an activation function, and obtaining the final output values. This process is crucial for the network's ability to make predictions or classifications based on input data.
+ * 
+ */
