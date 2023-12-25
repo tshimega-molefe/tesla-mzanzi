@@ -16,6 +16,8 @@ class Taxi {
 
     if (driverType !== "AI") {
       this.sensor = new Sensor(this);
+      // NOTE: This is pretty intuitive, I'm giving the taxi that doesn't belong to an AI(Poor naming, but its meant to represent other commuters on the road, who are essentially npcs, and NOT our self-driving taxi, anyway...  I am giving our taxi an instance of the Neural Network, and intialising it with three layers. The input layer contains a neuron count equal to the sensor ray count, a hidden layer containing 6 neurons, and finally an output layer containing a neuron count equal to "forward", "backward", "left", and "right.")
+      this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
     }
 
     this.driver = new Driver(driverType);
