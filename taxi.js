@@ -1,5 +1,5 @@
 class Taxi {
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, driverType, topSpeed = 3) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -7,19 +7,21 @@ class Taxi {
 
     this.speed = 0;
     this.acceleration = 0.2;
-    this.topSpeed = 3;
+    this.topSpeed = topSpeed;
     this.friction = 0.05;
 
     this.angle = 0;
 
     this.damaged = false;
 
-    this.sensor = new Sensor(this);
+    if (driverType !== "AI") {
+      this.sensor = new Sensor(this);
+    }
 
-    this.driver = new Driver();
+    this.driver = new Driver(driverType);
   }
 
-  update(jutaBorders) {
+  update(jutaBorders, traffic) {
     // Write-off the taxi in the event of a collision.
     if (!this.damaged) {
       this.#handleAcceleration();
@@ -28,16 +30,22 @@ class Taxi {
       this.#applyFriction();
       this.#moveTaxi();
       this.polygon = this.#createPolygon();
-      this.damaged = this.#assessDamage(jutaBorders);
+      this.damaged = this.#assessDamage(jutaBorders, traffic);
     }
-
-    this.sensor.update(jutaBorders);
+    if (this.sensor) {
+      this.sensor.update(jutaBorders, traffic);
+    }
   }
 
   // TODO: Implement collision detection
-  #assessDamage(jutaBorders) {
+  #assessDamage(jutaBorders, traffic) {
     for (let i = 0; i < jutaBorders.length; i++) {
       if (polysIntersect(this.polygon, jutaBorders[i])) {
+        return true;
+      }
+    }
+    for (let i = 0; i < traffic.length; i++) {
+      if (polysIntersect(this.polygon, traffic[i].polygon)) {
         return true;
       }
     }
@@ -122,7 +130,8 @@ class Taxi {
     }
 
     ctx.fill();
-
-    this.sensor.draw(ctx);
+    if (this.sensor) {
+      this.sensor.draw(ctx);
+    }
   }
 }

@@ -10,7 +10,7 @@ class Sensor {
   }
 
   // Update the sensor readings and rays based on the current state
-  update(jutaBorders) {
+  update(jutaBorders, traffic) {
     this.rays = [];
     this.readings = [];
 
@@ -27,7 +27,7 @@ class Sensor {
       this.rays.push([start, end]);
 
       // Get readings for the current ray and Juta Street borders
-      this.readings.push(this.#getReadings(this.rays[i], jutaBorders));
+      this.readings.push(this.#getReadings(this.rays[i], jutaBorders, traffic));
     }
   }
 
@@ -63,7 +63,7 @@ class Sensor {
   }
 
   // Calculate the readings from the sensor
-  #getReadings(ray, jutaBorders) {
+  #getReadings(ray, jutaBorders, traffic) {
     let touches = [];
 
     // Iterate through Juta Street borders and find intersections
@@ -76,6 +76,22 @@ class Sensor {
       );
       if (touch) {
         touches.push(touch);
+      }
+    }
+
+    //
+    for (let i = 0; i < traffic.length; i++) {
+      const poly = traffic[i].polygon;
+      for (let j = 0; j < poly.length; j++) {
+        const value = getIntersection(
+          ray[0],
+          ray[1],
+          poly[j],
+          poly[(j + 1) % poly.length]
+        );
+        if (value) {
+          touches.push(value);
+        }
       }
     }
 
@@ -100,7 +116,7 @@ class Sensor {
 
     ctx.beginPath();
     ctx.lineWidth = 2;
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "orange";
     ctx.moveTo(this.rays[rayIndex][1].x, this.rays[rayIndex][1].y);
     ctx.lineTo(end.x, end.y);
     ctx.stroke();

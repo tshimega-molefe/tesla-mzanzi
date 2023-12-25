@@ -1,10 +1,18 @@
 class Driver {
-  constructor() {
+  constructor(type) {
     this.forward = false;
     this.left = false;
     this.right = false;
     this.reverse = false;
-    this.#addKeyboardListeners();
+
+    switch (type) {
+      case "HUMAN":
+        this.#addKeyboardListeners();
+        break;
+      case "AI":
+        this.forward = true;
+        break;
+    }
   }
 
   // Input Listeners: Throttle, Break, Steering-Left, Steering-Right
