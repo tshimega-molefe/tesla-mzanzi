@@ -40,4 +40,32 @@ class Level {
       level.biases[i] = Math.random() * 2 - 1;
     }
   }
+
+  /**
+   * Perform a feedforward operation on the given inputs.
+   * @param {number[]} givenInputs - Array of input values.
+   * @param {Level} level - The Level instance to perform feedforward on.
+   * @returns {number[]} - Array of output values.
+   */
+  static feedForward(givenInputs, level) {
+    // Feedforward input neurons
+    for (let i = 0; i < level.inputs.length; i++) {
+      level.inputs[i].feedForward(givenInputs[i]);
+    }
+
+    // Feedforward output neurons
+    for (let i = 0; i < level.outputs.length; i++) {
+      let weightedSum = 0;
+
+      // Calculate the weighted sum
+      for (let j = 0; j < level.inputs.length; j++) {
+        weightedSum += level.inputs[j] * level.weights[j][i];
+      }
+
+      // Apply activation function (simple threshold)
+      level.outputs[i] = weightedSum > level.biases[i] ? 1 : 0;
+    }
+
+    return level.outputs;
+  }
 }
