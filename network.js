@@ -37,7 +37,7 @@ class Level {
     }
     for (let i = 0; i < level.biases.length; i++) {
       // Randomizing biases between -1 and 1
-      level.biases[i][j] = Math.random() * 2 - 1;
+      level.biases[i] = Math.random() * 2 - 1;
     }
   }
 }
