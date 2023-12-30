@@ -88,7 +88,7 @@ class Level {
   static feedForward(givenInputs, level) {
     // Feedforward input neurons
     for (let i = 0; i < level.inputs.length; i++) {
-      level.inputs[i].feedForward(givenInputs[i]);
+      level.inputs[i] = givenInputs[i];
     }
 
     // Feedforward output neurons
@@ -100,14 +100,16 @@ class Level {
         weightedSum += level.inputs[j] * level.weights[j][i];
       }
 
-      // Apply activation function (simple threshold)
-      level.outputs[i] = weightedSum > level.biases[i] ? 1 : 0;
-    }
+      if (weightedSum > level.biases[i]) {
+        level.outputs[i] = 1;
+      } else {
+        level.outputs[i] = 0;
+      }
 
-    return level.outputs;
+      return level.outputs;
+    }
   }
 }
-
 /**
  * Class representing a neural network input neuron.
  * 
@@ -138,4 +140,4 @@ Return Output Values:
 Finally, the method returns the updated output values of the level, which represent the network's output for the given inputs.
 In summary, the feedforward operation involves propagating input values through the network, calculating weighted sums, applying an activation function, and obtaining the final output values. This process is crucial for the network's ability to make predictions or classifications based on input data.
  * 
- */
+**/
