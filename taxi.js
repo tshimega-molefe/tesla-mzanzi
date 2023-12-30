@@ -14,7 +14,9 @@ class Taxi {
 
     this.damaged = false;
 
-    if (driverType !== "AI") {
+    this.useBrain = driverType === "AI";
+
+    if (driverType !== "DUMMY") {
       this.sensor = new Sensor(this);
       this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
     }
@@ -40,6 +42,13 @@ class Taxi {
       );
       const outputs = NeuralNetwork.feedForward(offsets, this.brain);
       console.log(outputs);
+
+      if (this.useBrain) {
+        this.driver.forward = outputs[0];
+        this.driver.left = outputs[1];
+        this.driver.right = outputs[2];
+        this.driver.reverse = outputs[3];
+      }
     }
   }
 
