@@ -9,7 +9,7 @@ const ctx = jozi.getContext("2d");
 const networkCtx = networkCanvas.getContext("2d");
 
 const juta = new Juta(jozi.width / 2, jozi.width * 0.9);
-const taxi = new Taxi(juta.getLaneCenter(1), 100, 30, 50, "AI", 2.22);
+const taxi = new Taxi(juta.getLaneCenter(1), 100, 30, 50, "AI", 2.6);
 const traffic = [new Taxi(juta.getLaneCenter(1), -100, 30, 50, "DUMMY", 2.2)];
 
 // Animating the movement of the Taxi
