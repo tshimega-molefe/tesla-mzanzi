@@ -37,7 +37,7 @@ function animate() {
 
   ctx.restore();
 
-  Visualizer.drawNetwork(networkCtx, this.brain);
+  Visualizer.drawNetwork(networkCtx, taxi.brain);
 
   requestAnimationFrame(animate);
 }
