@@ -14,8 +14,11 @@ class Taxi {
 
     this.damaged = false;
 
-    if (driverType !== "AI") {
+    this.useBrain = driverType === "AI";
+
+    if (driverType !== "DUMMY") {
       this.sensor = new Sensor(this);
+      this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
     }
 
     this.driver = new Driver(driverType);
@@ -34,10 +37,20 @@ class Taxi {
     }
     if (this.sensor) {
       this.sensor.update(jutaBorders, traffic);
+      const offsets = this.sensor.readings.map((s) =>
+        s === null ? 0 : 1 - s.offset
+      );
+      const outputs = NeuralNetwork.feedForward(offsets, this.brain);
+
+      if (this.useBrain) {
+        this.driver.forward = outputs[0];
+        this.driver.left = outputs[1];
+        this.driver.right = outputs[2];
+        this.driver.reverse = outputs[3];
+      }
     }
   }
 
-  // TODO: Implement collision detection
   #assessDamage(jutaBorders, traffic) {
     for (let i = 0; i < jutaBorders.length; i++) {
       if (polysIntersect(this.polygon, jutaBorders[i])) {
@@ -117,11 +130,11 @@ class Taxi {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-  draw(ctx) {
+  draw(ctx, color, drawSensor = false) {
     if (this.damaged) {
       ctx.fillStyle = "red";
     } else {
-      ctx.fillStyle = "black";
+      ctx.fillStyle = color;
     }
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
@@ -130,7 +143,7 @@ class Taxi {
     }
 
     ctx.fill();
-    if (this.sensor) {
+    if (this.sensor && drawSensor) {
       this.sensor.draw(ctx);
     }
   }

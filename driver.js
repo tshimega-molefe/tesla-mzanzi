@@ -6,10 +6,10 @@ class Driver {
     this.reverse = false;
 
     switch (type) {
-      case "HUMAN":
+      case "KEYS":
         this.#addKeyboardListeners();
         break;
-      case "AI":
+      case "DUMMY":
         this.forward = true;
         break;
     }
