@@ -16,6 +16,42 @@ class NeuralNetwork {
 
     return outputs;
   }
+
+  /**
+   * Mutate the neural network by adjusting biases and weights.
+   *
+   * @param {NeuralNetwork} network - The neural network to mutate.
+   * @param {number} amount - The magnitude of mutation, where a higher amount results in more significant changes (default is 1).
+   *
+   * Mutation Process:
+   * - The method iterates through each level in the neural network.
+   * - For each level, it adjusts the biases by applying linear interpolation (lerp) to gradually change each bias towards a random value between -1 and 1.
+   * - It also adjusts the weights in a similar manner. For each weight, lerp is applied to gradually change it towards a random value between -1 and 1.
+   *
+   * Magnitude of Mutation:
+   * - The amount parameter controls the magnitude of mutation. A higher amount leads to more significant changes in biases and weights.
+   *
+   * Rationale:
+   * - Mutation is a crucial step in the evolutionary process of neural networks. It introduces diversity in the population, allowing for exploration of different solutions.
+   * - The use of linear interpolation ensures a gradual change, preventing drastic alterations that may lead to the loss of useful information learned by the network.
+   * - The random values between -1 and 1 add stochasticity, promoting exploration of different regions in the solution space.
+   */
+  static mutate(network, amount = 1) {
+    network.levels.forEach((level) => {
+      for (let i = 0; i < level.biases.length; i++) {
+        level.biases[i] = lerp(level.biases[i], Math.random() * 2 - 1, amount);
+      }
+      for (let i = 0; i < level.weights.length; i++) {
+        for (let j = 0; j < level.weights[i].length; j++) {
+          level.weights[i][j] = lerp(
+            level.weights[i][j],
+            Math.random() * 2 - 1,
+            amount
+          );
+        }
+      }
+    });
+  }
 }
 
 class Level {
