@@ -10,17 +10,26 @@ const networkCtx = networkCanvas.getContext("2d");
 
 const juta = new Juta(jozi.width / 2, jozi.width * 0.9);
 
-const N = 100;
+const N = 300;
 const taxis = generateTaxis(N);
 let bestTaxi = taxis[0];
 if (localStorage.getItem("bestBrain")) {
-  bestTaxi.brain = JSON.parse(localStorage.getItem("bestBrain"));
+  for (let i = 0; i < taxis.length; i++) {
+    taxis[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
+    if (i != 0) {
+      NeuralNetwork.mutate(taxis[i].brain, 0.1);
+    }
+  }
 }
 
 const traffic = [
   new Taxi(juta.getLaneCenter(1), -100, 30, 50, "DUMMY", 2.2),
   new Taxi(juta.getLaneCenter(0), -300, 30, 50, "DUMMY", 2.2),
   new Taxi(juta.getLaneCenter(2), -300, 30, 50, "DUMMY", 2.2),
+  new Taxi(juta.getLaneCenter(0), -500, 30, 50, "DUMMY", 2.2),
+  new Taxi(juta.getLaneCenter(1), -500, 30, 50, "DUMMY", 2.2),
+  new Taxi(juta.getLaneCenter(1), -700, 30, 50, "DUMMY", 2.2),
+  new Taxi(juta.getLaneCenter(2), -700, 30, 50, "DUMMY", 2.2),
 ];
 
 // Animating the movement of the Taxi
