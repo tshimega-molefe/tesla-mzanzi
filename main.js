@@ -12,11 +12,28 @@ const juta = new Juta(jozi.width / 2, jozi.width * 0.9);
 
 const N = 100;
 const taxis = generateTaxis(N);
+let bestTaxi = taxis[0];
+if (localStorage.getItem("bestBrain")) {
+  bestTaxi.brain = JSON.parse(localStorage.getItem("bestBrain"));
+}
 
-const traffic = [new Taxi(juta.getLaneCenter(1), -100, 30, 50, "DUMMY", 2.2)];
+const traffic = [
+  new Taxi(juta.getLaneCenter(1), -100, 30, 50, "DUMMY", 2.2),
+  new Taxi(juta.getLaneCenter(0), -300, 30, 50, "DUMMY", 2.2),
+  new Taxi(juta.getLaneCenter(2), -300, 30, 50, "DUMMY", 2.2),
+];
 
 // Animating the movement of the Taxi
 animate();
+
+// Saving the most successful generation
+function save() {
+  localStorage.setItem("bestBrain", JSON.stringify(bestTaxi.brain));
+}
+
+function discard() {
+  localStorage.removeItem("bestBrain");
+}
 
 // Generating Taxi's
 function generateTaxis(N) {
@@ -35,7 +52,8 @@ function animate(time) {
     taxis[i].update(juta.borders, traffic);
   }
 
-  const bestTaxi = taxis.find((t) => t.y == Math.min(...taxis.map((t) => t.y)));
+  // Fitness function
+  bestTaxi = taxis.find((t) => t.y == Math.min(...taxis.map((t) => t.y)));
 
   jozi.height = window.innerHeight;
   networkCanvas.height = window.innerHeight;
