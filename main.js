@@ -15,7 +15,7 @@ const traffic = [new Taxi(juta.getLaneCenter(1), -100, 30, 50, "DUMMY", 2.2)];
 // Animating the movement of the Taxi
 animate();
 
-function animate() {
+function animate(time) {
   // Code for updating and drawing each Taxi in the traffic array
   for (let i = 0; i < traffic.length; i++) {
     traffic[i].update(juta.borders, []);
@@ -36,6 +36,8 @@ function animate() {
   taxi.draw(ctx, "black");
 
   ctx.restore();
+
+  networkCtx.lineDashOffset = -time / 50;
 
   Visualizer.drawNetwork(networkCtx, taxi.brain);
 
